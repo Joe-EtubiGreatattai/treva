@@ -86,7 +86,7 @@
   -moz-border-radius: 15px;
   -ms-border-radius: 15px;
   -o-border-radius: 15px;
-  border-bottom-right-radius: 0px;
+  border-bottom-right-radius: 0px !important;
 }
 
 .ai {
