@@ -1,7 +1,7 @@
-import express from 'express'
-import * as dotenv from 'dotenv'
-import cors from 'cors'
-import { Configuration, OpenAIApi } from 'openai'
+import express from 'express';
+import * as dotenv from 'dotenv';
+import cors from 'cors';
+import { Configuration, OpenAIApi } from 'openai';
 
 dotenv.config()
 
@@ -40,7 +40,6 @@ app.post('/', async (req, res) => {
     res.status(200).send({
       bot: response.data.choices[0].text
     });
-
   } catch (error) {
     console.error(error)
     res.status(500).send(error || 'Something went wrong');
