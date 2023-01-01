@@ -1,13 +1,13 @@
-import bot from './assets/bot.svg'
-import user from './assets/user.svg'
+import bot from './assets/bot.svg';
+import user from './assets/user.svg';
 
-const form = document.querySelector('form')
-const chatContainer = document.querySelector('#chat_container')
+const form = document.querySelector('form');
+const chatContainer = document.querySelector('#chat_container');
 
-let loadInterval
+let loadInterval;
 
 function loader(element) {
-    element.textContent = ''
+    element.textContent = '';
 
     loadInterval = setInterval(() => {
         // Update the text content of the loading indicator
@@ -21,16 +21,16 @@ function loader(element) {
 }
 
 function typeText(element, text) {
-    let index = 0
+    let index = 0;
 
     let interval = setInterval(() => {
         if (index < text.length) {
-            element.innerHTML += text.charAt(index)
-            index++
+            element.innerHTML += text.charAt(index);
+            index++;
         } else {
-            clearInterval(interval)
+            clearInterval(interval);
         }
-    }, 20)
+    }, 20);
 }
 
 // generate unique ID for each message div of bot
@@ -47,69 +47,72 @@ function generateUniqueId() {
 function chatStripe(isAi, value, uniqueId) {
     return (
         `
-        <div class="wrapper ${isAi && 'ai'||'user'}">
+        <div class="wrapper ${isAi ? 'ai' : 'user'}">
             <div class="chat">
-            
                 <div class="message" id=${uniqueId}>${value}</div>
-            </div>
-        </div>
-    `
-    )
-}
-
-const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    const data = new FormData(form)
-
-    // user's chatstripe
-    chatContainer.innerHTML += chatStripe(false, data.get('prompt'))
-
-    // to clear the textarea input 
-    form.reset()
-
-    // bot's chatstripe
-    const uniqueId = generateUniqueId()
-    chatContainer.innerHTML += chatStripe(true, " ", uniqueId)
-
-    // to focus scroll to the bottom 
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-
-    // specific message div 
-    const messageDiv = document.getElementById(uniqueId)
-
-    // messageDiv.innerHTML = "..."
-    loader(messageDiv)
-
-    const response = await fetch('https://treva.onrender.com', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            prompt: data.get('prompt')
-        })
-    })
-
-    clearInterval(loadInterval)
-    messageDiv.innerHTML = " "
-
-    if (response.ok) {
-        const data = await response.json();
-        const parsedData = data.bot.trim() // trims any trailing spaces/'\n' 
-
-        typeText(messageDiv, parsedData)
-    } else {
-        const err = await response.text()
-
-        messageDiv.innerHTML = "Something went wrong"
-        alert(err)
-    }
-}
-
-form.addEventListener('submit', handleSubmit)
-form.addEventListener('keyup', (e) => {
-    if (e.keyCode === 13) {
-        handleSubmit(e)
-    }
-})
+                    </div>
+                </div>
+            `
+            );
+        }
+        
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+        
+            const data = new FormData(form);
+        
+            // user's chatstripe
+            chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
+        
+            // to clear the textarea input 
+            form.reset();
+        
+            // bot's chatstripe
+            const uniqueId = generateUniqueId();
+            chatContainer.innerHTML += chatStripe(true, ' ', uniqueId);
+        
+            // to focus scroll to the bottom 
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        
+            // specific message div 
+            const messageDiv = document.getElementById(uniqueId);
+        
+            // messageDiv.innerHTML = "..."
+            loader(messageDiv);
+        
+            try {
+                const response = await fetch('https://treva.onrender.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        prompt: data.get('prompt'),
+                    }),
+                });
+        
+                if (response.ok) {
+                    clearInterval(loadInterval);
+                    messageDiv.innerHTML = ' ';
+        
+                    const data = await response.json();
+                    const parsedData = data.bot.trim(); // trims any trailing spaces/'\n' 
+        
+                    typeText(messageDiv, parsedData);
+                } else {
+                    throw new Error(response.statusText);
+                }
+            } catch (error) {
+                clearInterval(loadInterval);
+                messageDiv.innerHTML = 'Something went wrong';
+                alert(error.message);
+            }
+        };
+        
+        form.addEventListener('submit', handleSubmit);
+        form.addEventListener('keyup', (e) => {
+            if (e.keyCode === 13) {
+                handleSubmit(e);
+            }
+        });
+                
