@@ -19,7 +19,7 @@ app.use(express.json());
 
 app.get('/', async (req, res) => {
   res.status(200).send({
-    message: 'Hello from treva!',
+    message: 'Hello from Treva!',
   });
 });
 
@@ -42,7 +42,7 @@ app.post('/', async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send(error || 'Oppsie, Treva can\'t connect');
+    res.status(500).send(error || 'Something went wrong');
   }
 });
 
