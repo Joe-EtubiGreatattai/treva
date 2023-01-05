@@ -115,11 +115,12 @@ function chatStripe(isAi, value, uniqueId) {
                   clearInterval(loadInterval);
                   messageDiv.innerHTML = '...';
       
-                  const data = await response.json();
-                  const parsedData = data.bot.trim(); // trims any trailing spaces/'\n' 
+                //   const data = await response.json();
+                //   const parsedData = data.bot.trim(); 
+                // trims any trailing spaces/'\n' 
       
-                  typeText(messageDiv, parsedData);
-                //   messageDiv.innerHTML = xhr.responseText;
+                //   typeText(messageDiv, parsedData);
+                  messageDiv.innerHTML = xhr.responseText;
                }else{
                 var response=xhr.status;
                }};
