@@ -100,20 +100,19 @@ function chatStripe(isAi, value, uniqueId) {
             // });
             
               
-            loader(messageDiv)
+            messageDiv.innerHTML = '...'
             var url = "https://api.openai.com/v1/completions";
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", url);
             
             xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.setRequestHeader("Authorization", "Bearer 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");
+            xhr.setRequestHeader('Authorization','Bearer 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');
             
             xhr.onreadystatechange = function () {
                if (xhr.readyState === 4) {
                   console.log(xhr.status);
                   console.log(xhr.responseText);
-                  clearInterval(loadInterval);
       
                 //   const data = await response.json();
                 //   const parsedData = data.bot.trim(); 
