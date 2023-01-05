@@ -100,6 +100,7 @@ function chatStripe(isAi, value, uniqueId) {
             // });
             
               
+            loader(messageDiv)
             var url = "https://api.openai.com/v1/completions";
 
             var xhr = new XMLHttpRequest();
@@ -113,7 +114,6 @@ function chatStripe(isAi, value, uniqueId) {
                   console.log(xhr.status);
                   console.log(xhr.responseText);
                   clearInterval(loadInterval);
-                  messageDiv.innerHTML = '...';
       
                 //   const data = await response.json();
                 //   const parsedData = data.bot.trim(); 
