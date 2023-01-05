@@ -106,7 +106,7 @@ function chatStripe(isAi, value, uniqueId) {
             xhr.open("POST", url);
             
             xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.setRequestHeader("Authorization", "Bearer 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");
+            xhr.setRequestHeader("Authorization", "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");
             
             xhr.onreadystatechange = function () {
                if (xhr.readyState === 4) {
