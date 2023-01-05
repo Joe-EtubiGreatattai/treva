@@ -1,3 +1,14 @@
+
+// import { Configuration, OpenAIApi } from 'openai';
+
+
+// const configuration = new Configuration({
+//   apiKey: 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,
+// });
+
+// const openai = new OpenAIApi(configuration);
+
+
 const form = document.querySelector('form');
 const chatContainer = document.querySelector('#chat_container');
 
@@ -76,19 +87,64 @@ function chatStripe(isAi, value, uniqueId) {
     
         // messageDiv.innerHTML = "..."
         loader(messageDiv);
-    
+        
         try {
-            const response = await fetch('http://localhost:5000', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    prompt: data.get('prompt'),
-                }),
-            });
-    
-            if (response.ok) {
+            // const response = await fetch('http://localhost:5000', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({
+            //         prompt: data.get('prompt'),
+            //     }),
+            // });
+            
+              
+            var url = "https://api.openai.com/v1/completions";
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url);
+            
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.setRequestHeader("Authorization", "Bearer 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");
+            
+            xhr.onreadystatechange = function () {
+               if (xhr.readyState === 4) {
+                  console.log(xhr.status);
+                  console.log(xhr.responseText);
+                  clearInterval(loadInterval);
+                  messageDiv.innerHTML = '...';
+      
+                  const data = await response.json();
+                  const parsedData = data.bot.trim(); // trims any trailing spaces/'\n' 
+      
+                  typeText(messageDiv, parsedData);
+                //   messageDiv.innerHTML = xhr.responseText;
+               }else{
+                var response=xhr.status;
+               }};
+            
+           
+            
+              var senddata = `{
+                "model": "text-davinci-003",
+                "prompt": "ok bro",
+                "temperature": 0,
+                "max_tokens": 3000,
+                "top_p": 1,
+                "frequency_penalty": 0.5,
+                "presence_penalty": 0
+              }`;
+            
+           xhr.send(senddata);
+          
+            // xhr.status(200).send({
+            //     bot: response.data.choices[0].text,
+            //   });
+
+            //   console.log(response);
+
+            // if (response.ok) {
                 clearInterval(loadInterval);
                 messageDiv.innerHTML = ' ';
     
@@ -96,12 +152,12 @@ function chatStripe(isAi, value, uniqueId) {
                 const parsedData = data.bot.trim(); // trims any trailing spaces/'\n' 
     
                 typeText(messageDiv, parsedData);
-            } else {
-                throw new Error(response.statusText);
-            }
+            // } else {
+            //     throw new Error(response.statusText);
+            // }
         } catch (error) {
             clearInterval(loadInterval);
-            messageDiv.innerHTML = 'Oppsies';
+            messageDiv.innerHTML = open_ai_response;
             alert(error.message);
         }
     };
